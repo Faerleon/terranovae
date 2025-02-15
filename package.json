@@ -5,7 +5,9 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "clean:eslint": "eslint",
+    "clean:prettier": "prettier ./src -c"
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",
@@ -20,8 +22,8 @@
     "typescript-eslint": "^8.24.0"
   },
   "prettier": {
-    "tabs": true,
-    "tabsWidth": 4,
+    "useTabs": true,
+    "tabWidth": 4,
     "singleQuote": true,
     "bracketSpacing": true
   },
