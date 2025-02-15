@@ -28,5 +28,5 @@
     "bracketSpacing": true
   },
   "private": true,
-  "files": ["/build"]
+  "files": ["/dist"]
 }
