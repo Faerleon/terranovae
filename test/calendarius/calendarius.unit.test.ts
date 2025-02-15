@@ -1,10 +1,10 @@
+import { createUnitDefinition } from '../../src/calendarius/createUnitDefinition.function';
 import {
   BaseDefinitionFunction,
   BaseUnit,
-  createUnitDefinition,
   DefinitionFunction,
   DerivedUnit,
-} from '../../src/calendarius/createUnitDefinition.function';
+} from '../../src/calendarius';
 
 describe('Calendarius', () => {
   it('should create a model correctly', () => {
@@ -56,7 +56,7 @@ describe('Calendarius', () => {
     );
 
     expect(generatedDefinition).toStrictEqual({
-      list: new Map<string, BaseUnit | DerivedUnit>([
+      definedSystem: new Map<string, BaseUnit | DerivedUnit>([
         ['millisecond', { name: 'millisecond', base: true }],
         ['second', { name: 'second', inBase: 1000 }],
         ['minute', { name: 'minute', inBase: 1000 * 60 }],

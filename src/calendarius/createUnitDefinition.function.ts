@@ -6,14 +6,17 @@ import {
   UnitDefinition,
 } from './types';
 
+type UnitSystem = { definedSystem: DefinedSystem };
+
 /**
  *
  * @param args
  */
-export function createUnitDefinition(args: Args): DefinedSystem {
-  const definedSystem: DefinedSystem = {
-    list: new Map<string, BaseUnit | DerivedUnit>(),
-  };
+export function createUnitDefinition(args: Args): UnitSystem {
+  const definedSystem: DefinedSystem = new Map<
+    string,
+    BaseUnit | DerivedUnit
+  >();
 
   /**
    *
@@ -26,7 +29,7 @@ export function createUnitDefinition(args: Args): DefinedSystem {
     for (const definitionFragment of definedBy) {
       const [defByName] = definitionFragment;
       const alreadyDefined =
-        definedSystem.list.get(definitionFragment[0]) !== undefined;
+        definedSystem.get(definitionFragment[0]) !== undefined;
       if (!alreadyDefined) throw new Error('ERR_NO_DEFINITION: ' + defByName);
 
       // calculate each unit into its child unit until the base unit is used
@@ -38,7 +41,7 @@ export function createUnitDefinition(args: Args): DefinedSystem {
     }
 
     // store that value
-    definedSystem.list.set(name, { name, inBase });
+    definedSystem.set(name, { name, inBase });
   };
 
   /**
@@ -46,12 +49,12 @@ export function createUnitDefinition(args: Args): DefinedSystem {
    * @param name
    */
   const base = (name: string) => {
-    definedSystem.list.set(name, { name, base: true });
+    definedSystem.set(name, { name, base: true });
   };
 
   args(define, base);
 
-  return definedSystem;
+  return { definedSystem };
 }
 
 /**
@@ -64,7 +67,7 @@ function convertToBaseUnit(
   definedSystem: DefinedSystem,
 ): number {
   const [name, value] = definitionFragment;
-  const child = definedSystem.list.get(name);
+  const child = definedSystem.get(name);
   if ((child as BaseUnit).base) return value;
   return (child as DerivedUnit).inBase * value;
 }

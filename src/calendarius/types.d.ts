@@ -13,6 +13,4 @@ export type Args = (
   base: BaseDefinitionFunction,
 ) => void;
 
-export type DefinedSystem = {
-  list: Map<string, BaseUnit | DerivedUnit>;
-};
+export type DefinedSystem = Map<string, BaseUnit | DerivedUnit>;
