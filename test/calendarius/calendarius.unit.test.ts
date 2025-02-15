@@ -50,35 +50,24 @@ describe('Calendarius', () => {
 	it('should create a model correctly', () => {
 		expect(generatedDefinition).toStrictEqual({
 			definedSystem: new Map<string, BaseUnit | DerivedUnit>([
-				['millisecond', { name: 'millisecond', base: true }],
-				['second', { name: 'second', inBase: 1000 }],
-				['minute', { name: 'minute', inBase: 1000 * 60 }],
-				['hour', { name: 'hour', inBase: 1000 * 60 * 60 }],
-				['day', { name: 'day', inBase: 1000 * 60 * 60 * 24 }],
-				['week', { name: 'week', inBase: 1000 * 60 * 60 * 24 * 7 }],
-				[
-					'month_feb',
-					{ name: 'month_feb', inBase: 1000 * 60 * 60 * 24 * 28 },
-				],
+				['millisecond', { base: true }],
+				['second', { inBase: 1000 }],
+				['minute', { inBase: 1000 * 60 }],
+				['hour', { inBase: 1000 * 60 * 60 }],
+				['day', { inBase: 1000 * 60 * 60 * 24 }],
+				['week', { inBase: 1000 * 60 * 60 * 24 * 7 }],
+				['month_feb', { inBase: 1000 * 60 * 60 * 24 * 28 }],
 				[
 					'month_feb_leap',
 					{
-						name: 'month_feb_leap',
 						inBase: 1000 * 60 * 60 * 24 * 29,
 					},
 				],
-				[
-					'month_short',
-					{ name: 'month_short', inBase: 1000 * 60 * 60 * 24 * 30 },
-				],
-				[
-					'month_long',
-					{ name: 'month_long', inBase: 1000 * 60 * 60 * 24 * 31 },
-				],
+				['month_short', { inBase: 1000 * 60 * 60 * 24 * 30 }],
+				['month_long', { inBase: 1000 * 60 * 60 * 24 * 31 }],
 				[
 					'year',
 					{
-						name: 'year',
 						inBase:
 							1000 * 60 * 60 * 24 * 31 + // JAN
 							1000 * 60 * 60 * 24 * 28 + // FEB
@@ -97,7 +86,6 @@ describe('Calendarius', () => {
 				[
 					'year_leap',
 					{
-						name: 'year_leap',
 						inBase:
 							1000 * 60 * 60 * 24 * 31 + // JAN
 							1000 * 60 * 60 * 24 * 29 + // FEB (leap year)
@@ -116,7 +104,6 @@ describe('Calendarius', () => {
 				[
 					'cycle',
 					{
-						name: 'cycle',
 						// 1 leap year
 						inBase:
 							1000 * 60 * 60 * 24 * 365 * 3 + // 3 normal years

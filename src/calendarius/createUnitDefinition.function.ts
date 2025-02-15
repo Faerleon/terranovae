@@ -50,7 +50,7 @@ export function createUnitDefinition(args: Args): UnitSystem {
 		}
 
 		// store that value
-		definedSystem.set(name, { name, inBase });
+		definedSystem.set(name, { inBase });
 	};
 
 	/**
@@ -58,7 +58,7 @@ export function createUnitDefinition(args: Args): UnitSystem {
 	 * @param name of the base unit
 	 */
 	const base = (name: string) => {
-		definedSystem.set(name, { name, base: true });
+		definedSystem.set(name, { base: true });
 	};
 
 	args({ define, base });

@@ -1,5 +1,5 @@
-export type BaseUnit = { name: string; base: true };
-export type DerivedUnit = { name: string; inBase: number };
+export type BaseUnit = { base: true };
+export type DerivedUnit = { inBase: number };
 
 export type UnitDefinition = Array<[string, number]>;
 export type DefinitionFunction = (
