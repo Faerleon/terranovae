@@ -27,6 +27,5 @@
     "singleQuote": true,
     "bracketSpacing": true
   },
-  "private": true,
   "files": ["/dist"]
 }
