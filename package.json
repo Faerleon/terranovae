@@ -27,5 +27,6 @@
     "singleQuote": true,
     "bracketSpacing": true
   },
-  "private": true
+  "private": true,
+  "files": ["/build"]
 }
