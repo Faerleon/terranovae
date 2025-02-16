@@ -9,62 +9,23 @@ export const expectedDefinition = new Map<
 >([
 	['millisecond', { base: true }],
 	['second', { inBase: 1000 }],
-	['minute', { inBase: 1000 * 60 }],
-	['hour', { inBase: 1000 * 60 * 60 }],
-	['day', { inBase: 1000 * 60 * 60 * 24 }],
-	['week', { inBase: 1000 * 60 * 60 * 24 * 7 }],
-	['month_feb', { inBase: 1000 * 60 * 60 * 24 * 28 }],
+	['minute', { inBase: 60000 }],
+	['hour', { inBase: 3600000 }],
+	['day', { inBase: 86400000 }],
+	['week', { inBase: 604800000 }],
+	['month_feb', { inBase: 2419200000 }],
 	[
 		'month_feb_leap',
 		{
-			inBase: 1000 * 60 * 60 * 24 * 29,
+			inBase: 2505600000,
 		},
 	],
-	['month_short', { inBase: 1000 * 60 * 60 * 24 * 30 }],
-	['month_long', { inBase: 1000 * 60 * 60 * 24 * 31 }],
+	['month_short', { inBase: 2592000000 }],
+	['month_long', { inBase: 2678400000 }],
 	[
 		'year',
 		{
-			inBase:
-				1000 * 60 * 60 * 24 * 31 + // JAN
-				1000 * 60 * 60 * 24 * 28 + // FEB
-				1000 * 60 * 60 * 24 * 31 + // MAR
-				1000 * 60 * 60 * 24 * 30 + // APR
-				1000 * 60 * 60 * 24 * 31 + // MAY
-				1000 * 60 * 60 * 24 * 30 + // JUN
-				1000 * 60 * 60 * 24 * 31 + // JUL
-				1000 * 60 * 60 * 24 * 31 + // AUG
-				1000 * 60 * 60 * 24 * 30 + // SEP
-				1000 * 60 * 60 * 24 * 31 + // OCT
-				1000 * 60 * 60 * 24 * 30 + // NOV
-				1000 * 60 * 60 * 24 * 31, // DEC
-		},
-	],
-	[
-		'year_leap',
-		{
-			inBase:
-				1000 * 60 * 60 * 24 * 31 + // JAN
-				1000 * 60 * 60 * 24 * 29 + // FEB (leap year)
-				1000 * 60 * 60 * 24 * 31 + // MAR
-				1000 * 60 * 60 * 24 * 30 + // APR
-				1000 * 60 * 60 * 24 * 31 + // MAY
-				1000 * 60 * 60 * 24 * 30 + // JUN
-				1000 * 60 * 60 * 24 * 31 + // JUL
-				1000 * 60 * 60 * 24 * 31 + // AUG
-				1000 * 60 * 60 * 24 * 30 + // SEP
-				1000 * 60 * 60 * 24 * 31 + // OCT
-				1000 * 60 * 60 * 24 * 30 + // NOV
-				1000 * 60 * 60 * 24 * 31, // DEC
-		},
-	],
-	[
-		'cycle',
-		{
-			// 1 leap year
-			inBase:
-				1000 * 60 * 60 * 24 * 365 * 3 + // 3 normal years
-				1000 * 60 * 60 * 24 * 366,
+			inBase: expect.any(Function),
 		},
 	],
 ]);

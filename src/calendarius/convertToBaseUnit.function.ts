@@ -1,4 +1,5 @@
 import {
+	TArgUnitDefinitionFunction,
 	TOptionsBaseUnit,
 	TOptionsDerivedUnit,
 	TStoredDefinitionUnitMap,
@@ -15,6 +16,17 @@ export function convertToBaseUnit(
 ): number {
 	const [name, value] = definitionFragment;
 	const child = definedSystem.get(name);
+
+	// if its the base unit, just return it
 	if ((child as TOptionsBaseUnit).base) return value;
-	return (child as TOptionsDerivedUnit).inBase * value;
+
+	const baseUnitRaw: number | TArgUnitDefinitionFunction = (
+		child as TOptionsDerivedUnit
+	).inBase;
+
+	// if its a static derivation value, we can just calculate it
+	if (typeof baseUnitRaw === 'number') return baseUnitRaw * value;
+
+	// if its a function, we have to resolve it
+	return 0;
 }

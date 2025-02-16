@@ -8,10 +8,19 @@ export type TCreateUnitDefinitionArguments = (creatingFunctions: {
 export type TOptionsBaseUnit = { base: true };
 
 /** used to define a derived unit in the API */
-export type TOptionsDerivedUnit = { inBase: number };
+export type TOptionsDerivedUnit = {
+	inBase: number | TArgUnitDefinitionFunction;
+};
+
+/** for explicit definition functions */
+export type TArgUnitDefinitionFunction = (
+	rawInput: number,
+) => Array<[string, number]>;
 
 /** API: describes how a unit is defined by smaller units */
-export type TArgUnitDefinedBy = Array<[string, number]>;
+export type TArgUnitDefinedBy =
+	| Array<[string, number]>
+	| TArgUnitDefinitionFunction;
 
 // ----- DEFINITION DSL -----
 

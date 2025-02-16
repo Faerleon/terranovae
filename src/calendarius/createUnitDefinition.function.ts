@@ -28,9 +28,17 @@ export function createUnitDefinition(
 	 * @param definedBy a sequence of other units that define this one
 	 */
 	const define = (name: string, definedBy: TArgUnitDefinedBy): void => {
+		// when we use a definition function, just store it instead of resolving
+		if (typeof definedBy === 'function') {
+			definedSystem.set(name, { inBase: definedBy });
+			return;
+		}
+
+		// when we use a static value, we can resolve it instantly
 		let inBase = 0;
 		// get all units in the definition and check if they exist
 		for (const definitionFragment of definedBy) {
+			// check if child definition exists
 			const [defByName] = definitionFragment;
 			const alreadyDefined =
 				definedSystem.get(definitionFragment[0]) !== undefined;
