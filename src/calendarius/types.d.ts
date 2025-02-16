@@ -2,6 +2,7 @@
 export type TCreateUnitDefinitionArguments = (creatingFunctions: {
 	define: TFunctionDefine;
 	base: TFunctionBase;
+	sequence: TFunctionSequence;
 }) => void;
 
 /** used to define the base unit in the API */
@@ -33,6 +34,9 @@ export type TFunctionDefine = (
 /** type to define the function that the API provides to create a base unit */
 export type TFunctionBase = (name: string) => void;
 
+/** type to create patterns for human input and output */
+export type TFunctionSequence = (name: string, pattern: string) => void;
+
 // ----- STORAGE -----
 
 /** the defined system is stored into a map */
@@ -41,5 +45,19 @@ export type TStoredDefinitionUnitMap = Map<
 	TOptionsBaseUnit | TOptionsDerivedUnit
 >;
 
+export type TFunctionStoredDefinitionCreateResult = {
+	raw: number;
+	units: string[];
+};
+
+/** method to convert strings into unit objects */
+export type TFunctionStoredDefinitionCreate = (
+	sequenceName: string,
+	sequenceContent: string,
+) => TFunctionStoredDefinitionCreateResult;
+
 /** master object to store all functionality for the created system */
-export type TStoredDefinition = { definedSystem: TStoredDefinitionUnitMap };
+export type TStoredDefinition = {
+	definedSystem: TStoredDefinitionUnitMap;
+	create: TFunctionStoredDefinitionCreate;
+};

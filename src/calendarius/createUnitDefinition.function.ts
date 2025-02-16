@@ -1,12 +1,16 @@
 import {
 	TArgUnitDefinedBy,
 	TCreateUnitDefinitionArguments,
+	TFunctionSequence,
+	TFunctionStoredDefinitionCreateResult,
 	TOptionsBaseUnit,
 	TOptionsDerivedUnit,
 	TStoredDefinition,
 	TStoredDefinitionUnitMap,
 } from './types';
 import { convertToBaseUnit } from './convertToBaseUnit.function';
+import extractKeysFromString from './extractKeysFromString.function';
+import extractValuesWithTemplate from './extractValuesWithTemplate.function';
 
 /**
  * method to create unit definitions
@@ -21,6 +25,9 @@ export function createUnitDefinition(
 		TOptionsBaseUnit | TOptionsDerivedUnit
 	>();
 
+	// Map to store all string sequences used to create patterns
+	const sequences: Map<string, string> = new Map();
+
 	/**
 	 * definition function for non-base units
 	 * each unit is defined by a sequence of child units
@@ -33,6 +40,8 @@ export function createUnitDefinition(
 			definedSystem.set(name, { inBase: definedBy });
 			return;
 		}
+
+		// ----- API -----
 
 		// when we use a static value, we can resolve it instantly
 		let inBase = 0;
@@ -65,7 +74,46 @@ export function createUnitDefinition(
 		definedSystem.set(name, { base: true });
 	};
 
-	args({ define, base });
+	/**
+	 * used to create patterns for human readable input and output
+	 * @param name the name of the pattern
+	 * @param pattern the pattern itself
+	 */
+	const sequence: TFunctionSequence = (
+		name: string,
+		pattern: string,
+	): void => {
+		// validate that every key in the sequence exists
+		const keys = extractKeysFromString(pattern);
+		for (const key of keys) {
+			if (definedSystem.get(key) === undefined)
+				throw new Error('ERR_NO_DEFINITION: ' + key);
+		}
+		// store the sequence
+		sequences.set(name, pattern);
+	};
 
-	return { definedSystem };
+	// ----- GENERATE -----
+	const create = (
+		patternName: string,
+		patternContent: string,
+	): TFunctionStoredDefinitionCreateResult => {
+		const template = sequences.get(patternName);
+		if (!template) throw new Error('ERR_NO_PATTERN: ' + patternName);
+
+		// create map with values from template
+		const valuesFromPatternContent: Map<string, string> =
+			extractValuesWithTemplate(template, patternContent);
+
+		// TODO for each value, generate the base value
+		console.log('result: ', valuesFromPatternContent);
+
+		return { raw: 0, units: extractKeysFromString(template) };
+	};
+
+	// bind API methods
+	args({ define, base, sequence });
+
+	// return final created instance
+	return { definedSystem, create };
 }

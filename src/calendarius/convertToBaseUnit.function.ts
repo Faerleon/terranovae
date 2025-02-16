@@ -28,5 +28,5 @@ export function convertToBaseUnit(
 	if (typeof baseUnitRaw === 'number') return baseUnitRaw * value;
 
 	// if its a function, we have to resolve it
-	return 0;
+	throw new Error('unit is not a number but should be at this point');
 }
