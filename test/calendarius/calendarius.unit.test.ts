@@ -1,4 +1,4 @@
-import { BaseUnit, DerivedUnit } from '../../src/calendarius';
+import { TOptionsBaseUnit, TOptionsDerivedUnit } from '../../src/calendarius';
 import { createUnitDefinition } from '../../src/calendarius/createUnitDefinition.function';
 
 describe('Calendarius', () => {
@@ -49,7 +49,10 @@ describe('Calendarius', () => {
 
 	it('should create a model correctly', () => {
 		expect(generatedDefinition).toStrictEqual({
-			definedSystem: new Map<string, BaseUnit | DerivedUnit>([
+			definedSystem: new Map<
+				string,
+				TOptionsBaseUnit | TOptionsDerivedUnit
+			>([
 				['millisecond', { base: true }],
 				['second', { inBase: 1000 }],
 				['minute', { inBase: 1000 * 60 }],

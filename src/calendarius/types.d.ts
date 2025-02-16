@@ -1,12 +1,36 @@
-export type BaseUnit = { base: true };
-export type DerivedUnit = { inBase: number };
+/**  */
+export type TCreateUnitDefinitionArguments = (creatingFunctions: {
+	define: TFunctionDefine;
+	base: TFunctionBase;
+}) => void;
 
-export type UnitDefinition = Array<[string, number]>;
-export type DefinitionFunction = (
+/** used to define the base unit in the API */
+export type TOptionsBaseUnit = { base: true };
+
+/** used to define a derived unit in the API */
+export type TOptionsDerivedUnit = { inBase: number };
+
+/** API: describes how a unit is defined by smaller units */
+export type TArgUnitDefinedBy = Array<[string, number]>;
+
+// ----- DEFINITION DSL -----
+
+/** type to define the function that the API provides to create a unit */
+export type TFunctionDefine = (
 	name: string,
-	definedBy: UnitDefinition,
+	definedBy: TArgUnitDefinedBy,
 ) => void;
-export type BaseDefinitionFunction = (name: string) => void;
 
-export type DefinedSystem = Map<string, BaseUnit | DerivedUnit>;
-export type UnitSystem = { definedSystem: DefinedSystem };
+/** type to define the function that the API provides to create a base unit */
+export type TFunctionBase = (name: string) => void;
+
+// ----- STORAGE -----
+
+/** the defined system is stored into a map */
+export type TStoredDefinitionUnitMap = Map<
+	string,
+	TOptionsBaseUnit | TOptionsDerivedUnit
+>;
+
+/** master object to store all functionality for the created system */
+export type TStoredDefinition = { definedSystem: TStoredDefinitionUnitMap };

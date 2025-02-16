@@ -1,28 +1,24 @@
 import {
-	BaseDefinitionFunction,
-	BaseUnit,
-	DefinedSystem,
-	DefinitionFunction,
-	DerivedUnit,
-	UnitDefinition,
-	UnitSystem,
+	TArgUnitDefinedBy,
+	TCreateUnitDefinitionArguments,
+	TOptionsBaseUnit,
+	TOptionsDerivedUnit,
+	TStoredDefinition,
+	TStoredDefinitionUnitMap,
 } from './types';
 import { convertToBaseUnit } from './convertToBaseUnit.function';
-
-export type Args = (creatingFunctions: {
-	define: DefinitionFunction;
-	base: BaseDefinitionFunction;
-}) => void;
 
 /**
  * method to create unit definitions
  * each unit is defined by a quantity of its base unit
  * @param args a callback containing methods to define the system
  */
-export function createUnitDefinition(args: Args): UnitSystem {
-	const definedSystem: DefinedSystem = new Map<
+export function createUnitDefinition(
+	args: TCreateUnitDefinitionArguments,
+): TStoredDefinition {
+	const definedSystem: TStoredDefinitionUnitMap = new Map<
 		string,
-		BaseUnit | DerivedUnit
+		TOptionsBaseUnit | TOptionsDerivedUnit
 	>();
 
 	/**
@@ -31,7 +27,7 @@ export function createUnitDefinition(args: Args): UnitSystem {
 	 * @param name the name of the unit
 	 * @param definedBy a sequence of other units that define this one
 	 */
-	const define = (name: string, definedBy: UnitDefinition) => {
+	const define = (name: string, definedBy: TArgUnitDefinedBy): void => {
 		let inBase = 0;
 		// get all units in the definition and check if they exist
 		for (const definitionFragment of definedBy) {
@@ -57,7 +53,7 @@ export function createUnitDefinition(args: Args): UnitSystem {
 	 * definition function for the base unit
 	 * @param name of the base unit
 	 */
-	const base = (name: string) => {
+	const base = (name: string): void => {
 		definedSystem.set(name, { base: true });
 	};
 
