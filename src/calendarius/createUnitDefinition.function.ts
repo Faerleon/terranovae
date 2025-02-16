@@ -105,10 +105,17 @@ export function createUnitDefinition(
 		const valuesFromPatternContent: Map<string, string> =
 			extractValuesWithTemplate(template, patternContent);
 
-		// TODO for each value, generate the base value
-		console.log('result: ', valuesFromPatternContent);
+		// for each value, generate the base value
+		let sum = 0;
+		for (const [key, value] of valuesFromPatternContent) {
+			const converted = convertToBaseUnit(
+				[key, Number(value)],
+				definedSystem,
+			);
+			sum += converted;
+		}
 
-		return { raw: 0, units: extractKeysFromString(template) };
+		return { raw: sum, units: extractKeysFromString(template) };
 	};
 
 	// bind API methods
