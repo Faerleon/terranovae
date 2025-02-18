@@ -49,7 +49,13 @@ describe('Calendarius', () => {
 		});
 	});
 
-	it('should create unit instances correctly with dynamic functions', () => {});
+	it('should create unit instances correctly with dynamic functions', () => {
+		const myDate = generatedDefinition.create('date', '24.12.1995');
+		expect(myDate).toStrictEqual({
+			raw: 79718400000,
+			units: ['day', 'month', 'year'],
+		});
+	});
 });
 
 function isLeapYear(rawValue: number): boolean {
