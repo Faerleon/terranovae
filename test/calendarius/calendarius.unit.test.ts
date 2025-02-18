@@ -10,13 +10,23 @@ describe('Calendarius', () => {
 			define('hour', [['minute', 60]]);
 			define('day', [['hour', 24]]);
 			define('week', [['day', 7]]);
-			define('month', (rawInput: number) => {
-				// TODO provide all other inputs to determine things like leap years
-				if ([1, 3, 5, 7, 8, 10, 12].includes(rawInput))
-					return [['day', 31]];
-				if ([2, 4, 6, 9, 11].includes(rawInput)) return [['day', 30]];
-				throw new Error(`INVALID_INPUT_MONTH: ${rawInput}`);
-			});
+			define(
+				'month',
+				(rawInput: number, allInputValues: Map<string, number>) => {
+					const year = allInputValues.get('year');
+					if (!year) throw new Error('ERR_MONTH_NO_YEAR_PROVIDED');
+
+					if ([2].includes(rawInput))
+						return isLeapYear(rawInput)
+							? [['day', 29]]
+							: [['day', 28]];
+					if ([1, 3, 5, 7, 8, 10, 12].includes(rawInput))
+						return [['day', 31]];
+					if ([2, 4, 6, 9, 11].includes(rawInput))
+						return [['day', 30]];
+					throw new Error(`INVALID_INPUT_MONTH: ${rawInput}`);
+				},
+			);
 			define('year', [['month', 12]]);
 
 			sequence('time', '{hour}:{minute}:{second}');

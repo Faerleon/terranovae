@@ -16,6 +16,7 @@ export type TOptionsDerivedUnit = {
 /** for explicit definition functions */
 export type TArgUnitDefinitionFunction = (
 	rawInput: number,
+	allInputValues: Map<string, number>,
 ) => Array<[string, number]>;
 
 /** API: describes how a unit is defined by smaller units */
