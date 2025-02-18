@@ -10,43 +10,17 @@ describe('Calendarius', () => {
 			define('hour', [['minute', 60]]);
 			define('day', [['hour', 24]]);
 			define('week', [['day', 7]]);
-			define('month_feb', [['day', 28]]);
-			define('month_feb_leap', [['day', 29]]);
-			define('month_short', [['day', 30]]);
-			define('month_long', [['day', 31]]);
-			define('year', (rawInput: number) => {
-				if (isLeapYear(rawInput))
-					return [
-						['month_long', 1], // JAN
-						['month_feb_leap', 1], // FEB
-						['month_long', 1], // MAR
-						['month_short', 1], // APR
-						['month_long', 1], // MAY
-						['month_short', 1], // JUN
-						['month_long', 1], // JUL
-						['month_long', 1], // AUG
-						['month_short', 1], // SEP
-						['month_long', 1], // OCT
-						['month_short', 1], // NOV
-						['month_long', 1], // DEZ
-					];
-				return [
-					['month_long', 1], // JAN
-					['month_feb', 1], // FEB
-					['month_long', 1], // MAR
-					['month_short', 1], // APR
-					['month_long', 1], // MAY
-					['month_short', 1], // JUN
-					['month_long', 1], // JUL
-					['month_long', 1], // AUG
-					['month_short', 1], // SEP
-					['month_long', 1], // OCT
-					['month_short', 1], // NOV
-					['month_long', 1], // DEZ
-				];
+			define('month', (rawInput: number) => {
+				// TODO provide all other inputs to determine things like leap years
+				if ([1, 3, 5, 7, 8, 10, 12].includes(rawInput))
+					return [['day', 31]];
+				if ([2, 4, 6, 9, 11].includes(rawInput)) return [['day', 30]];
+				throw new Error(`INVALID_INPUT_MONTH: ${rawInput}`);
 			});
+			define('year', [['month', 12]]);
 
 			sequence('time', '{hour}:{minute}:{second}');
+			sequence('date', '{day}.{month}.{year}');
 		},
 	);
 
@@ -64,6 +38,8 @@ describe('Calendarius', () => {
 			units: ['hour', 'minute', 'second'],
 		});
 	});
+
+	it('should create unit instances correctly with dynamic functions', () => {});
 });
 
 function isLeapYear(rawValue: number): boolean {

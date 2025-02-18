@@ -10,7 +10,7 @@ export type TOptionsBaseUnit = { base: true };
 
 /** used to define a derived unit in the API */
 export type TOptionsDerivedUnit = {
-	inBase: number | TArgUnitDefinitionFunction;
+	definedBy: TArgUnitDefinedBy;
 };
 
 /** for explicit definition functions */

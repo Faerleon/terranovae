@@ -8,9 +8,7 @@ import {
 	TStoredDefinition,
 	TStoredDefinitionUnitMap,
 } from './types';
-import { convertToBaseUnit } from './convertToBaseUnit.function';
 import extractKeysFromString from './extractKeysFromString.function';
-import extractValuesWithTemplate from './extractValuesWithTemplate.function';
 
 /**
  * method to create unit definitions
@@ -36,34 +34,7 @@ export function createUnitDefinition(
 	 */
 	const define = (name: string, definedBy: TArgUnitDefinedBy): void => {
 		// when we use a definition function, just store it instead of resolving
-		if (typeof definedBy === 'function') {
-			definedSystem.set(name, { inBase: definedBy });
-			return;
-		}
-
-		// ----- API -----
-
-		// when we use a static value, we can resolve it instantly
-		let inBase = 0;
-		// get all units in the definition and check if they exist
-		for (const definitionFragment of definedBy) {
-			// check if child definition exists
-			const [defByName] = definitionFragment;
-			const alreadyDefined =
-				definedSystem.get(definitionFragment[0]) !== undefined;
-			if (!alreadyDefined)
-				throw new Error('ERR_NO_DEFINITION: ' + defByName);
-
-			// calculate each unit into its child unit until the base unit is used
-			const convertedToBaseUnit = convertToBaseUnit(
-				definitionFragment,
-				definedSystem,
-			);
-			inBase += convertedToBaseUnit;
-		}
-
-		// store that value
-		definedSystem.set(name, { inBase });
+		definedSystem.set(name, { definedBy });
 	};
 
 	/**
@@ -101,21 +72,9 @@ export function createUnitDefinition(
 		const template = sequences.get(patternName);
 		if (!template) throw new Error('ERR_NO_PATTERN: ' + patternName);
 
-		// create map with values from template
-		const valuesFromPatternContent: Map<string, string> =
-			extractValuesWithTemplate(template, patternContent);
+		// TODO check how to create a stored unit
 
-		// for each value, generate the base value
-		let sum = 0;
-		for (const [key, value] of valuesFromPatternContent) {
-			const converted = convertToBaseUnit(
-				[key, Number(value)],
-				definedSystem,
-			);
-			sum += converted;
-		}
-
-		return { raw: sum, units: extractKeysFromString(template) };
+		return { raw: 0, units: extractKeysFromString(template) };
 	};
 
 	// bind API methods
