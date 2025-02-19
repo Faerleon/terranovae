@@ -8,6 +8,7 @@ import {
 	TStoredDefinition,
 	TStoredDefinitionUnitMap,
 } from './types';
+import convertValuesToBaseValue from './convertValuesToBaseValue.function';
 import extractKeysFromString from './extractKeysFromString.function';
 import extractValuesWithTemplate from './extractValuesWithTemplate.function';
 
@@ -79,9 +80,16 @@ export function createUnitDefinition(
 
 		// check the provided values to convert to the base unit
 		const values = extractValuesWithTemplate(template, patternContent);
+		const mapConvertedToNumericValues: Map<string, number> = new Map();
+		values.forEach((value, key) => {
+			mapConvertedToNumericValues.set(key, Number(value));
+		});
 
 		// TODO convert each value into its child unit until only the base unit remains.
-		const valueInBaseUnit = 0;
+		const valueInBaseUnit = convertValuesToBaseValue(
+			mapConvertedToNumericValues,
+			definedSystem,
+		);
 
 		return {
 			patternName,
@@ -94,5 +102,5 @@ export function createUnitDefinition(
 	args({ define, base, sequence });
 
 	// return final created instance
-	return { definedSystem, create };
+	return { definedSystem: Object.freeze(definedSystem), create };
 }

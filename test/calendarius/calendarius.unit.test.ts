@@ -1,5 +1,6 @@
 import { createUnitDefinition } from '../../src/calendarius/createUnitDefinition.function';
 import { expectedDefinition } from './_data/expectedDefinition';
+import convertValuesToBaseValue from '../../src/calendarius/convertValuesToBaseValue.function';
 
 describe('Calendarius', () => {
 	const generatedDefinition = createUnitDefinition(
@@ -57,6 +58,20 @@ describe('Calendarius', () => {
 			valueInBaseUnit: 79718400000,
 			units: ['day', 'month', 'year'],
 		});
+	});
+
+	it('should convert value maps to a base value', () => {
+		const values = new Map<string, number>([
+			['hour', 6],
+			['minute', 32],
+			['second', 40],
+		]);
+		const result = convertValuesToBaseValue(
+			values,
+			generatedDefinition.definedSystem,
+		);
+
+		expect(result).toStrictEqual(23560000);
 	});
 });
 
