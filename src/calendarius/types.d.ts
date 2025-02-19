@@ -47,7 +47,8 @@ export type TStoredDefinitionUnitMap = Map<
 >;
 
 export type TFunctionStoredDefinitionCreateResult = {
-	raw: number;
+	patternName: string;
+	valueInBaseUnit: number;
 	units: string[];
 };
 

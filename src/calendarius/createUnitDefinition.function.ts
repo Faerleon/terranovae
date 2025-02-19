@@ -9,6 +9,7 @@ import {
 	TStoredDefinitionUnitMap,
 } from './types';
 import extractKeysFromString from './extractKeysFromString.function';
+import extractValuesWithTemplate from './extractValuesWithTemplate.function';
 
 /**
  * method to create unit definitions
@@ -69,12 +70,24 @@ export function createUnitDefinition(
 		patternName: string,
 		patternContent: string,
 	): TFunctionStoredDefinitionCreateResult => {
+		// retrieve the template from all stored templates
 		const template = sequences.get(patternName);
 		if (!template) throw new Error('ERR_NO_PATTERN: ' + patternName);
 
-		// TODO check how to create a stored unit
+		// check what units the template generates
+		const units = extractKeysFromString(template);
 
-		return { raw: 0, units: extractKeysFromString(template) };
+		// check the provided values to convert to the base unit
+		const values = extractValuesWithTemplate(template, patternContent);
+
+		// TODO convert each value into its child unit until only the base unit remains.
+		const valueInBaseUnit = 0;
+
+		return {
+			patternName,
+			valueInBaseUnit,
+			units,
+		};
 	};
 
 	// bind API methods

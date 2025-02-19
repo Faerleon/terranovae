@@ -7,12 +7,19 @@ export default function extractValuesWithTemplate(
 	template: string,
 	content: string,
 ): Map<string, string> {
-	const regex = /\{(\w+)}/g;
 	const keys: string[] = [];
-	const pattern: string = template.replace(regex, (_, key: string) => {
-		keys.push(key);
-		return '(.+?)';
-	});
+
+	// Escape all regex special characters in the template except for `{}` placeholders
+	const escapedTemplate = template.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+
+	// Restore `{key}` placeholders before replacing them with capture groups
+	const pattern = escapedTemplate.replace(
+		/\\\{(\w+)\\}/g,
+		(_, key: string) => {
+			keys.push(key);
+			return '(.+?)'; // Capturing group for the value
+		},
+	);
 
 	const matchRegex = new RegExp(`^${pattern}$`);
 	const match = content.match(matchRegex);
