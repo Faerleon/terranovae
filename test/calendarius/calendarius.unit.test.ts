@@ -11,27 +11,30 @@ describe('Calendarius', () => {
 			define('hour', [['minute', 60]]);
 			define('day', [['hour', 24]]);
 			define('week', [['day', 7]]);
-			define(
-				'month',
-				(rawInput: number, allInputValues: Map<string, number>) => {
-					const year = allInputValues.get('year');
-					if (!year) throw new Error('ERR_MONTH_NO_YEAR_PROVIDED');
+			define('month', (rawMonths: number) => {
+				let totalDays: number = 0;
+				let currentMonth = 1;
+				let currentYear = 1;
 
-					if ([2].includes(rawInput))
-						return isLeapYear(rawInput)
-							? [['day', 29]]
-							: [['day', 28]];
-					if ([1, 3, 5, 7, 8, 10, 12].includes(rawInput))
-						return [['day', 31]];
-					if ([2, 4, 6, 9, 11].includes(rawInput))
-						return [['day', 30]];
-					throw new Error(`INVALID_INPUT_MONTH: ${rawInput}`);
-				},
-			);
+				for (let i = 1; i <= rawMonths; i++) {
+					// figure out how many days in currentMonth / currentYear:
+					totalDays += retrieveDaysOfMonth(currentMonth, currentYear);
+
+					// move to the next month
+					currentMonth++;
+					if (currentMonth > 12) {
+						currentMonth = 1;
+						currentYear++;
+					}
+				}
+
+				return [['day', totalDays]];
+			});
 			define('year', [['month', 12]]);
 
 			sequence('time', '{hour}:{minute}:{second}');
 			sequence('date', '{day}.{month}.{year}');
+			sequence('year', '{year}');
 		},
 	);
 
@@ -39,6 +42,15 @@ describe('Calendarius', () => {
 		expect(generatedDefinition).toStrictEqual({
 			definedSystem: expectedDefinition,
 			create: expect.any(Function),
+		});
+	});
+
+	it('should convert single values correctly', () => {
+		const result = generatedDefinition.create('year', '1');
+		expect(result).toStrictEqual({
+			patternName: 'year',
+			valueInBaseUnit: 31536000000,
+			units: ['year'],
 		});
 	});
 
@@ -55,7 +67,7 @@ describe('Calendarius', () => {
 		const myDate = generatedDefinition.create('date', '24.12.1995');
 		expect(myDate).toStrictEqual({
 			patternName: 'date',
-			valueInBaseUnit: 79718400000,
+			valueInBaseUnit: 62989660800000,
 			units: ['day', 'month', 'year'],
 		});
 	});
@@ -80,4 +92,11 @@ function isLeapYear(rawValue: number): boolean {
 		throw new Error('Input must be an integer.');
 
 	return (rawValue % 4 === 0 && rawValue % 100 !== 0) || rawValue % 400 === 0;
+}
+
+function retrieveDaysOfMonth(month: number, year: number): number {
+	if ([2].includes(month)) return isLeapYear(year) ? 29 : 28;
+	if ([1, 3, 5, 7, 8, 10, 12].includes(month)) return 31;
+	if ([4, 6, 9, 11].includes(month)) return 30;
+	throw new Error(`INVALID_INPUT_MONTH: ${month}`);
 }

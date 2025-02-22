@@ -1,8 +1,4 @@
-import {
-	TOptionsBaseUnit,
-	TOptionsDerivedUnit,
-	TStoredDefinitionUnitMap,
-} from './types';
+import { TOptionsDerivedUnit, TStoredDefinitionUnitMap } from './types';
 
 /**
  * converts a value map into a base system.
@@ -19,8 +15,6 @@ export default function convertValuesToBaseValue(
 
 	Object.freeze(values);
 	const localValues: Map<string, number> = new Map<string, number>(values);
-
-	console.log('initial', localValues);
 
 	while (localValues.size > 0) {
 		// iterate through each unit, convert it to child and add it to the sum if it is the base unit
@@ -46,10 +40,12 @@ export default function convertValuesToBaseValue(
 				// these are the values from the definition
 				for (const [childUnitName, childUnitValue] of children) {
 					const existingValue = localValues.get(childUnitName) ?? 0;
-					localValues.set(
-						childUnitName,
-						existingValue + childUnitValue * unitValue,
-					);
+
+					const newValue = Array.isArray(childValues)
+						? existingValue + childUnitValue * unitValue
+						: existingValue + childUnitValue;
+
+					localValues.set(childUnitName, newValue);
 				}
 			}
 
@@ -57,10 +53,7 @@ export default function convertValuesToBaseValue(
 		}
 
 		// safety to prevent infinite loops
-		if (currentLoops++ >= maxLoops) {
-			console.log('MAX_LOOP');
-			break;
-		}
+		if (currentLoops++ >= maxLoops) throw new Error('ERR_MAX_LOOPS');
 	}
 	return sum;
 }
