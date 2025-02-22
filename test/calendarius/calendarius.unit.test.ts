@@ -1,5 +1,5 @@
 import convertValuesToBaseValue from '../../src/calendarius/convertValuesToBaseValue.function';
-import { createUnitDefinition } from '../../src/calendarius/createUnitDefinition.function';
+import { createUnitDefinition } from '../../src/calendarius';
 import { expectedDefinition } from './_data/expectedDefinition';
 
 describe('Calendarius', () => {
