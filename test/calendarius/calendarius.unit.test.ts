@@ -1,6 +1,6 @@
+import convertValuesToBaseValue from '../../src/calendarius/convertValuesToBaseValue.function';
 import { createUnitDefinition } from '../../src/calendarius/createUnitDefinition.function';
 import { expectedDefinition } from './_data/expectedDefinition';
-import convertValuesToBaseValue from '../../src/calendarius/convertValuesToBaseValue.function';
 
 describe('Calendarius', () => {
 	const generatedDefinition = createUnitDefinition(
@@ -42,7 +42,7 @@ describe('Calendarius', () => {
 		});
 	});
 
-	it('should create unit instances correctly', () => {
+	it('should create unit instances correctly (time)', () => {
 		const myTime = generatedDefinition.create('time', '11:32:42');
 		expect(myTime).toStrictEqual({
 			patternName: 'time',
@@ -51,7 +51,7 @@ describe('Calendarius', () => {
 		});
 	});
 
-	it('should create unit instances correctly with dynamic functions', () => {
+	it('should create unit instances correctly (date))', () => {
 		const myDate = generatedDefinition.create('date', '24.12.1995');
 		expect(myDate).toStrictEqual({
 			patternName: 'date',
