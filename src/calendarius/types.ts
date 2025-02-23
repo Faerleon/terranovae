@@ -46,6 +46,7 @@ export type TStoredDefinitionUnitMap = Map<
 	TOptionsBaseUnit | TOptionsDerivedUnit
 >;
 
+/** result of the create function */
 export type TFunctionStoredDefinitionCreateResult = {
 	patternName: string;
 	valueInBaseUnit: number;
