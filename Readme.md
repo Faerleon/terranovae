@@ -10,7 +10,7 @@ A toolset for world creators in fantasy, sci-fi, cyberpunk and more.
 ### Calendarius
 Create all sorts of unit systems from time to distance.
 Used for custom unit creation like custom calendars and distance systems.
-Supports 
+Supports creating custom templates to input values.
 
 ```typescript
 const generatedDefinition = createUnitDefinition(
