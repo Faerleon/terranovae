@@ -85,7 +85,7 @@ export function createUnitDefinition(
 			mapConvertedToNumericValues.set(key, Number(value));
 		});
 
-		// TODO convert each value into its child unit until only the base unit remains.
+		// convert each value into its child unit until only the base unit remains.
 		const valueInBaseUnit = convertValuesToBaseValue(
 			mapConvertedToNumericValues,
 			definedSystem,
