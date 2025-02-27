@@ -12,7 +12,11 @@ Create all sorts of unit systems from time to distance.
 Used for custom unit creation like custom calendars and distance systems.
 Supports creating custom templates to input values.
 
+#### Create a new definition from scratch
+
 ```typescript
+import { createUnitDefinition } from "terranovae/calendarius";
+
 const generatedDefinition = createUnitDefinition(
     ({ define, base, sequence }) => {
         base('millisecond');
@@ -45,4 +49,21 @@ const generatedDefinition = createUnitDefinition(
 
 // contains the value as base value, in milliseconds in this case
 const myTime = generatedDefinition.create('time', '11:32:42');
+```
+
+#### store a definition as JSON
+
+A definition can be stored as a JSON string to save it in a database or file.
+
+```typescript
+const stringifiedSystem = generatedDefinition.toJson();
+```
+
+And can also be created from a JSON value.
+
+```typescript
+import { fromJson } from "terranovae/calendarius";
+import mySystem from "./mySystem.json";
+
+const restoredSystem = fromJson(mySystem);
 ```

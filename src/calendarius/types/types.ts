@@ -63,4 +63,5 @@ export type TFunctionStoredDefinitionCreate = (
 export type TStoredDefinition = {
 	definedSystem: TStoredDefinitionUnitMap;
 	create: TFunctionStoredDefinitionCreate;
+	toJson: () => string;
 };

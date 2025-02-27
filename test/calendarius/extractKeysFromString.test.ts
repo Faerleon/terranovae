@@ -1,4 +1,4 @@
-import extractKeysFromString from '../../src/calendarius/extractKeysFromString.function';
+import extractKeysFromString from '../../src/calendarius/functions/extractKeysFromString.function';
 
 describe('extractKeysFromString', () => {
 	it('should extract keys from string', () => {

@@ -1,2 +1,3 @@
-export * from './types';
+export * from './types/types';
 export * from './createUnitDefinition.function';
+export * from './fromJson';

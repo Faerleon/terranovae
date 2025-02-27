@@ -1,6 +1,6 @@
 {
   "name": "terranovae",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0",
   "description": "toolkit to create fantastic worlds",
   "main": "dist/index.js",
   "scripts": {

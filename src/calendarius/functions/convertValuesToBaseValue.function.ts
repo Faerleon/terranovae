@@ -1,4 +1,4 @@
-import { TOptionsDerivedUnit, TStoredDefinitionUnitMap } from './types';
+import { TOptionsDerivedUnit, TStoredDefinitionUnitMap } from '../types/types';
 
 /**
  * converts a value map into a base system.

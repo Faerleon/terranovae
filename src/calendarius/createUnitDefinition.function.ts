@@ -7,10 +7,10 @@ import {
 	TOptionsDerivedUnit,
 	TStoredDefinition,
 	TStoredDefinitionUnitMap,
-} from './types';
-import convertValuesToBaseValue from './convertValuesToBaseValue.function';
-import extractKeysFromString from './extractKeysFromString.function';
-import extractValuesWithTemplate from './extractValuesWithTemplate.function';
+} from './types/types';
+import convertValuesToBaseValue from './functions/convertValuesToBaseValue.function';
+import extractKeysFromString from './functions/extractKeysFromString.function';
+import extractValuesWithTemplate from './functions/extractValuesWithTemplate.function';
 
 /**
  * method to create unit definitions
@@ -98,9 +98,20 @@ export function createUnitDefinition(
 		};
 	};
 
+	function toJson() {
+		return JSON.stringify(
+			Object.fromEntries(definedSystem),
+			(key, value) => {
+				return typeof value === 'function'
+					? { __isFunction__: true, code: String(value) }
+					: value;
+			},
+		);
+	}
+
 	// bind API methods
 	args({ define, base, sequence });
 
 	// return final created instance
-	return { definedSystem: Object.freeze(definedSystem), create };
+	return { definedSystem: Object.freeze(definedSystem), create, toJson };
 }
