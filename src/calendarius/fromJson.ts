@@ -1,7 +1,7 @@
 import {
 	TFunctionStoredDefinitionCreateResult,
 	TStoredDefinition,
-} from './types/types';
+} from './types';
 import convertValuesToBaseValue from './functions/convertValuesToBaseValue.function';
 import extractKeysFromString from './functions/extractKeysFromString.function';
 import extractValuesWithTemplate from './functions/extractValuesWithTemplate.function';
