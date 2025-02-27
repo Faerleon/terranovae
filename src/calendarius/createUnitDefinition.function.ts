@@ -15,6 +15,8 @@ import extractValuesWithTemplate from './functions/extractValuesWithTemplate.fun
 /**
  * method to create unit definitions
  * each unit is defined by a quantity of its base unit
+ *
+ * @group Calendarius
  * @param args a callback containing methods to define the system
  */
 export function createUnitDefinition(

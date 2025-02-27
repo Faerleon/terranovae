@@ -1,7 +1,6 @@
+import { createUnitDefinition, fromJson } from '../../src/calendarius';
 import convertValuesToBaseValue from '../../src/calendarius/functions/convertValuesToBaseValue.function';
-import { createUnitDefinition } from '../../src/calendarius';
 import { expectedDefinition } from './_data/expectedDefinition';
-import fromJson from '../../src/calendarius/fromJson';
 
 describe('Calendarius', () => {
 	const expectedJson = `{"millisecond":{"base":true},"second":{"definedBy":[["millisecond",1000]]},"minute":{"definedBy":[["second",60]]},"hour":{"definedBy":[["minute",60]]},"day":{"definedBy":[["hour",24]]},"week":{"definedBy":[["day",7]]},"month":{"definedBy":{"__isFunction__":true,"code":"(rawMonths) => {\\n            let totalDays = 0;\\n            let currentMonth = 1;\\n            let currentYear = 1;\\n            for (let i = 1; i <= rawMonths; i++) {\\n                // figure out how many days in currentMonth / currentYear:\\n                totalDays += retrieveDaysOfMonth(currentMonth, currentYear);\\n                // move to the next month\\n                currentMonth++;\\n                if (currentMonth > 12) {\\n                    currentMonth = 1;\\n                    currentYear++;\\n                }\\n            }\\n            return [['day', totalDays]];\\n        }"}},"year":{"definedBy":[["month",12]]}}`;

@@ -6,7 +6,14 @@ import convertValuesToBaseValue from './functions/convertValuesToBaseValue.funct
 import extractKeysFromString from './functions/extractKeysFromString.function';
 import extractValuesWithTemplate from './functions/extractValuesWithTemplate.function';
 
-export default function fromJson(json: string): TStoredDefinition {
+/**
+ * creates a definition from a json string
+ *
+ * @group Calendarius
+ * @param json a json string that was creating using the .toJson method of a defined system
+ * @return TStoredDefinition a unit definition
+ */
+export function fromJson(json: string): TStoredDefinition {
 	const reversed: object = JSON.parse(json, (key, value) => {
 		if (typeof value === 'object' && value.__isFunction__ === true) {
 			return new Function(`return (${value.code})`)();
