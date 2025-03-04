@@ -1,92 +1,47 @@
 <!DOCTYPE html>
 <div id="container"></div>
 <script type="module">
-
     import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
-    // Declare the chart dimensions and margins.
-    const width = 800;
-    const height = 800;
-    const directrix = 500;
+    const width = 800, height = 800;
+    const numPoints = 20;
 
-    // Create the SVG container.
-    const svg = d3.create("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .attr("style", "outline: thin solid black");
+    // Generate random points
+    const points = Array.from({ length: numPoints }, () => [Math.random() * width, Math.random() * height]);
 
-    function generateDots(count, precision) {
-        const points = [];
-        for (let i = 0; i < count; i++) {
-            const x = Math.round(Math.random() * precision) / precision;
-            const y = Math.round(Math.random() * precision) / precision;
-            points.push([x, y])
-        }
-        return points;
-    }
+    // Compute Voronoi diagram
+    const delaunay = d3.Delaunay.from(points);
+    const voronoi = delaunay.voronoi([0, 0, width, height]); // Define bounds
 
-    const points = generateDots(10, 1000)
+    // Draw the polygons
+    const svg = d3.select("#container").append("svg").attr("width", width).attr("height", height);
 
-    function drawFocusBased(point, directrix) {
-        const [h, k] = point; // Extracting focus coordinates
-        const d = directrix / height; // Directrix y-coordinate
-        const quadratic = (x) => ((x - h) ** 2 + k ** 2 - d ** 2) / (2 * (k - d));
-        const qpoints = [];
+    svg.selectAll("path")
+        .data(Array.from(voronoi.cellPolygons()))
+        .enter()
+        .append("path")
+        .attr("d", d => "M" + d.join("L") + "Z")
+        .attr("stroke", "#000")
+        .attr("fill", "none");
 
-        if (k === d) throw new Error("The focus cannot be on the directrix.");
+    svg.selectAll(".delaunay")
+        .data(Array.from(delaunay.trianglePolygons()))
+        .enter()
+        .append("path")
+        .attr("d", d => "M" + d.join("L") + "Z")
+        .attr("stroke", "#f0f1")
+        .attr("fill", "none");
 
-        for (let x = 0; x <= 1; x+= 0.01) qpoints.push([x, quadratic(x)]);
-
-        svg
-            .append("circle")
-            .attr("r", 4)
-            .attr("cx", h * width)
-            .attr("cy", k * height)
-            .attr("fill", "violet")
-
-        svg
-            .selectAll(".green-line")
-            .data(qpoints.slice(1))
-            .enter()
-            .append("line")
-            .attr("x1", (p, i) => qpoints[i][0] * width)
-            .attr("y1", (p, i) => qpoints[i][1] * height)
-            .attr("x2", (p) => p[0] * width)
-            .attr("y2", (p) => p[1] * height)
-            .attr("stroke", "green")
-
-        return qpoints;
-    }
-
-    points
-        .filter(p => p[1] < directrix / height)
-        .forEach(point => drawFocusBased(point, directrix));
-
-    svg
-        .selectAll(".red-circle")
+    // Draw the points
+    svg.selectAll("circle")
         .data(points)
         .enter()
         .append("circle")
-        .attr("r", 5)
-        .attr("cx", d => d[0] * width)
-        .attr("cy", d =>  d[1] * height)
-        .attr("fill", "red")
-
-    const line = svg
-        .append("line")
-        .attr("x1", 0)
-        .attr("y1", directrix)
-        .attr("x2", width)
-        .attr("y2", directrix)
-        .attr("stroke", "violet")
-
-    svg
-        .append("polygon")
-        .attr("points", [[100,200], [430,240], [121,104]].map((p => p.join(","))))
-        .attr("fill", "#0004")
-        .attr("stroke", "black")
+        .attr("cx", d => d[0])
+        .attr("cy", d => d[1])
+        .attr("r", 3)
+        .attr("fill", "red");
 
     // Append the SVG element.
-    container.append(svg.node());
-
+    document.getElementById("container").append(svg.node());
 </script>
